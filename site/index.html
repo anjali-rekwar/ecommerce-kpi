@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Commerce Sales Performance &amp; KPI Dashboard</title>
+  <style>
+    body{font-family:Segoe UI,Arial,sans-serif;max-width:1000px;margin:auto;padding:20px;color:#222}
+    .kpis{display:flex;gap:12px;flex-wrap:wrap}
+    .kpi{flex:1;min-width:160px;background:#f3f6fb;padding:16px;border-radius:8px;text-align:center}
+    .kpi b{display:block;font-size:1.5em}
+    img{max-width:100%;margin:12px 0}
+    iframe{width:100%;height:420px;border:0}
+  </style>
+</head>
+<body>
+  <h1>E-Commerce Sales Performance &amp; KPI Dashboard</h1>
+  <p>Analysis of UCI Online Retail transactions using Python, SQL and Power BI.</p>
+
+  <div class="kpis">
+    <div class="kpi"><b>10,631,048.74 </b>Total revenue</div>
+    <div class="kpi"><b>19,959 </b>Total orders</div>
+    <div class="kpi"><b>532.64 </b>Avg order value</div>
+    <div class="kpi"><b>4,338</b>Unique customers</div>
+  </div>
+
+  <h2>Power BI Dashboard</h2>
+  <img src="images/powerbi_dashboard.png" alt="Power BI dashboard">
+
+  <h2>Sales Trends</h2>
+  <iframe src="charts/monthly.html"></iframe>
+  <iframe src="charts/top_products.html"></iframe>
+  <iframe src="charts/countries.html"></iframe>
+
+  <h2>Distribution and Outliers</h2>
+  <img src="images/order_distribution.png" alt="Order value distribution">
+  <img src="images/heatmap.png" alt="Revenue heatmap">
+
+  <h2>Key Findings and Recommendations</h2>
+  <ul><li>Write after you have computed your numbers.</li></ul>
+
+  <p><a href="https://github.com/anjali-rekwar/ecommerce-kpi">GitHub repository</a></p>
+</body>
+</html>
