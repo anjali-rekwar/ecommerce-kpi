@@ -1,0 +1,15 @@
+{
+  "kpis": {
+    "revenue": "£10,631,049",
+    "orders": "19,959",
+    "aov": "£532.64",
+    "customers": "4,338"
+  },
+  "findings": [
+    "Revenue peaked in 2011-11 at £1,503,867.",
+    "The top 10 products make up 10.8% of total revenue.",
+    "The United Kingdom accounts for 84.6% of revenue.",
+    "The median order is £303.30 against a mean of £532.64, so a few large orders pull the average up.",
+    "1,810 orders (9.1%) are IQR outliers, which suggests a separate wholesale segment."
+  ]
+}

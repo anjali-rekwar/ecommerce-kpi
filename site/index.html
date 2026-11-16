@@ -92,6 +92,7 @@ footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);f
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
+
 <body>
 
 <header class="top">
@@ -106,10 +107,10 @@ footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);f
     </nav>
     <!-- EDIT: replace each "—" with your printed value from notebook Cell 3 -->
     <div class="kpis" role="list">
-      <div class="kpi" role="listitem"><span class="v">10,631,048.74</span><span class="l">Total revenue</span></div>
-      <div class="kpi" role="listitem"><span class="v">19,959</span><span class="l">Total orders</span></div>
-      <div class="kpi" role="listitem"><span class="v">532.64</span><span class="l">Average order value</span></div>
-      <div class="kpi" role="listitem"><span class="v">4,338</span><span class="l">Unique customers</span></div>
+     <div class="kpi" role="listitem"><span class="v" data-kpi="revenue">…</span><span class="l">Total revenue</span></div>
+<div class="kpi" role="listitem"><span class="v" data-kpi="orders">…</span><span class="l">Total orders</span></div>
+<div class="kpi" role="listitem"><span class="v" data-kpi="aov">…</span><span class="l">Average order value</span></div>
+<div class="kpi" role="listitem"><span class="v" data-kpi="customers">…</span><span class="l">Unique customers</span></div>
     </div>
   </div>
 </header>
@@ -160,7 +161,16 @@ footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);f
     </div>
   </section>
 
-  
+   <section id="findings">
+    <h2>Findings and recommendations</h2>
+    <p class="lede">Generated from the notebook results.</p>
+    <ul class="findings" id="findings-list">
+      <li>Finding 1: peak month and how much it exceeds the average month.</li>
+      <li>Finding 2: share of revenue from the top 10 products.</li>
+      <li>Finding 3: share of revenue from the United Kingdom versus other countries.</li>
+      <li>Recommendation: stock up before the seasonal peak and target one-time customers with repeat-purchase offers.</li>
+    </ul>
+  </section>
 
   <section>
     <h2>Technologies used</h2>
@@ -174,9 +184,27 @@ footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);f
 
 <footer>
   <div class="wrap">
-    <a href="https://github.com/YOUR-USERNAME/ecommerce-kpi-dashboard">View the code on GitHub</a>
+    <a href="https://github.com/anjali-rekwar/ecommerce-kpi">View the code on GitHub</a>
   </div>
 </footer>
-
+<script>
+fetch("kpis.json")
+  .then(r => r.json())
+  .then(d => {
+    document.querySelectorAll("[data-kpi]").forEach(el => {
+      el.textContent = d.kpis[el.dataset.kpi] ?? "—";
+    });
+    if (d.findings && d.findings.length) {
+      const ul = document.getElementById("findings-list");
+      ul.innerHTML = "";
+      d.findings.forEach(t => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        ul.appendChild(li);
+      });
+    }
+  })
+  .catch(() => {});
+</script>
 </body>
 </html>
