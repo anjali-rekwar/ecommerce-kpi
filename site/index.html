@@ -1,44 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>E-Commerce Sales Performance &amp; KPI Dashboard</title>
-  <style>
-    body{font-family:Segoe UI,Arial,sans-serif;max-width:1000px;margin:auto;padding:20px;color:#222}
-    .kpis{display:flex;gap:12px;flex-wrap:wrap}
-    .kpi{flex:1;min-width:160px;background:#f3f6fb;padding:16px;border-radius:8px;text-align:center}
-    .kpi b{display:block;font-size:1.5em}
-    img{max-width:100%;margin:12px 0}
-    iframe{width:100%;height:420px;border:0}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-Commerce Sales Performance &amp; KPI Dashboard</title>
+<meta name="description" content="Revenue, orders, products and customers from UCI Online Retail transactions, analysed with Python, SQL and Power BI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6fa; --panel:#ffffff; --ink:#0f1b2d; --muted:#5b6678;
+  --line:#d8dee8; --accent:#2457d6; --accent-soft:#e6edfc; --hl:#f2a900;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 1rem/1.65 "IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--hl);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header.top{background:var(--ink);color:#fff;padding:56px 0 0}
+header.top h1{
+  margin:0 0 12px; font-size:clamp(1.9rem,4.5vw,3rem);
+  line-height:1.12; font-weight:700; letter-spacing:-.02em; max-width:18ch;
+}
+header.top p{margin:0 0 28px;max-width:60ch;color:#c4cddc;font-size:1.05rem}
+nav.links{display:flex;gap:22px;flex-wrap:wrap;padding-bottom:28px}
+nav.links a{color:#fff;text-decoration:none;border-bottom:2px solid var(--hl);padding-bottom:2px;font-weight:500}
+nav.links a:hover{border-color:#fff}
+
+/* KPI band: one connected strip, the focal point of the page */
+.kpis{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  background:var(--panel); color:var(--ink);
+  border-radius:var(--radius) var(--radius) 0 0;
+  transform:translateY(1px);
+}
+.kpi{padding:26px 24px;border-right:1px solid var(--line)}
+.kpi:last-child{border-right:0}
+.kpi .v{
+  display:block; font-size:clamp(1.6rem,3.4vw,2.5rem); font-weight:700;
+  letter-spacing:-.02em; line-height:1.1; font-variant-numeric:tabular-nums;
+  color:var(--accent);
+}
+.kpi .l{display:block;margin-top:6px;color:var(--muted);font-size:.95rem}
+
+/* Sections */
+main{padding:48px 0 24px}
+section{margin-bottom:56px}
+h2{margin:0 0 6px;font-size:1.6rem;letter-spacing:-.01em;line-height:1.25}
+.lede{margin:0 0 20px;color:var(--muted);max-width:68ch}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.panel figcaption,.panel .cap{padding:12px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+.panel img{display:block;width:100%;height:auto}
+
+/* Dashboard screenshot in a window frame */
+.frame-bar{display:flex;gap:6px;padding:10px 14px;background:#eef1f6;border-bottom:1px solid var(--line)}
+.frame-bar i{width:10px;height:10px;border-radius:50%;background:#c3cbd8}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid2 .wide{grid-column:1 / -1}
+iframe{display:block;width:100%;height:400px;border:0;background:#fff}
+
+/* Findings */
+.findings{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.findings li{
+  background:var(--panel);border:1px solid var(--line);
+  border-left:4px solid var(--hl);border-radius:var(--radius);padding:14px 18px;
+}
+
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.stack li{background:var(--accent-soft);color:#173a94;border-radius:999px;padding:5px 14px;font-size:.92rem;font-weight:500}
+
+footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);font-size:.95rem}
+
+@media (max-width:760px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi:nth-child(2){border-right:0}
+  .kpi:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .grid2{grid-template-columns:1fr}
+  iframe{height:340px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <h1>E-Commerce Sales Performance &amp; KPI Dashboard</h1>
-  <p>Analysis of UCI Online Retail transactions using Python, SQL and Power BI.</p>
 
-  <div class="kpis">
-    <div class="kpi"><b>10,631,048.74 </b>Total revenue</div>
-    <div class="kpi"><b>19,959 </b>Total orders</div>
-    <div class="kpi"><b>532.64 </b>Avg order value</div>
-    <div class="kpi"><b>4,338</b>Unique customers</div>
+<header class="top">
+  <div class="wrap">
+    <h1>E-Commerce Sales Performance &amp; KPI Dashboard</h1>
+    <p>Revenue, orders, products and customers from UCI Online Retail transactions, analysed with Python, SQL and Power BI.</p>
+    <nav class="links" aria-label="Page sections">
+      <a href="#dashboard">Power BI dashboard</a>
+      <a href="#trends">Sales trends</a>
+      <a href="#distribution">Distribution</a>
+      <a href="#findings">Findings</a>
+    </nav>
+    <!-- EDIT: replace each "—" with your printed value from notebook Cell 3 -->
+    <div class="kpis" role="list">
+      <div class="kpi" role="listitem"><span class="v">—</span><span class="l">Total revenue</span></div>
+      <div class="kpi" role="listitem"><span class="v">—</span><span class="l">Total orders</span></div>
+      <div class="kpi" role="listitem"><span class="v">—</span><span class="l">Average order value</span></div>
+      <div class="kpi" role="listitem"><span class="v">—</span><span class="l">Unique customers</span></div>
+    </div>
   </div>
+</header>
 
-  <h2>Power BI Dashboard</h2>
-  <img src="images/powerbi_dashboard.png" alt="Power BI dashboard">
+<main class="wrap">
 
-  <h2>Sales Trends</h2>
-  <iframe src="charts/monthly.html"></iframe>
-  <iframe src="charts/top_products.html"></iframe>
-  <iframe src="charts/countries.html"></iframe>
+  <section id="dashboard">
+    <h2>Power BI dashboard</h2>
+    <p class="lede">KPI cards, monthly trend, top products and revenue by country, with slicers for date, country and product.</p>
+    <figure class="panel" style="margin:0">
+      <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+      <img src="images/powerbi_dashboard.png" alt="Power BI dashboard showing sales KPIs, monthly revenue, top products and revenue by country" loading="lazy">
+      <figcaption>Built from the cleaned dataset with a date table and DAX measures. The .pbix file is in the GitHub repository.</figcaption>
+    </figure>
+  </section>
 
-  <h2>Distribution and Outliers</h2>
-  <img src="images/order_distribution.png" alt="Order value distribution">
-  <img src="images/heatmap.png" alt="Revenue heatmap">
+  <section id="trends">
+    <h2>Sales trends</h2>
+    <p class="lede">Hover over the charts to read exact values.</p>
+    <div class="grid2">
+      <div class="panel wide">
+        <iframe src="charts/monthly.html" title="Monthly revenue line chart" loading="lazy"></iframe>
+        <div class="cap">Monthly revenue</div>
+      </div>
+      <div class="panel">
+        <iframe src="charts/top_products.html" title="Top 10 products by revenue" loading="lazy"></iframe>
+        <div class="cap">Top 10 products by revenue</div>
+      </div>
+      <div class="panel">
+        <iframe src="charts/countries.html" title="Top 10 countries by revenue" loading="lazy"></iframe>
+        <div class="cap">Top 10 countries by revenue</div>
+      </div>
+    </div>
+  </section>
 
-  <h2>Key Findings and Recommendations</h2>
-  <ul><li>Write after you have computed your numbers.</li></ul>
+  <section id="distribution">
+    <h2>Distribution and outliers</h2>
+    <p class="lede">Order values are right-skewed, so the median describes a typical order better than the mean. Outliers are flagged with the IQR rule.</p>
+    <div class="grid2">
+      <figure class="panel" style="margin:0">
+        <img src="images/order_distribution.png" alt="Box plot and log-scale histogram of order values" loading="lazy">
+        <figcaption>Order value: box plot and log-scale histogram</figcaption>
+      </figure>
+      <figure class="panel" style="margin:0">
+        <img src="images/heatmap.png" alt="Heatmap of revenue by weekday and hour" loading="lazy">
+        <figcaption>Revenue by weekday and hour</figcaption>
+      </figure>
+    </div>
+  </section>
 
-  <p><a href="https://github.com/anjali-rekwar/ecommerce-kpi">GitHub repository</a></p>
+  <section id="findings">
+    <h2>Findings and recommendations</h2>
+    <p class="lede">Replace these with results from your own run.</p>
+    <ul class="findings">
+      <li>Finding 1: peak month and how much it exceeds the average month.</li>
+      <li>Finding 2: share of revenue from the top 10 products.</li>
+      <li>Finding 3: share of revenue from the United Kingdom versus other countries.</li>
+      <li>Recommendation: stock up before the seasonal peak and target one-time customers with repeat-purchase offers.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technologies used</h2>
+    <ul class="stack">
+      <li>Python</li><li>Pandas</li><li>NumPy</li><li>Matplotlib</li><li>Seaborn</li>
+      <li>Plotly</li><li>SQL (SQLite)</li><li>Power BI</li><li>DAX</li><li>Jupyter Notebook</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://github.com/YOUR-USERNAME/ecommerce-kpi-dashboard">View the code on GitHub</a>
+  </div>
+</footer>
+
 </body>
 </html>
